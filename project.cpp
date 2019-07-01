@@ -1,92 +1,230 @@
 #include <iostream>
-#define MAX 100
+#include <iomanip>
+#include <queue>
+#include <conio.h>
+#include <stdlib.h>
+#include <array>
+#include <time.h>
+#include <ctype.h>
+#include <vector>
+
+#define MAX 10
+
 using namespace std;
 
-/* struct pilihan {
-  int id;
-  char menu[MAX];
-  double harga;   
-}client;*/
- 
-/*void menu() {
-    int jml, i, total, banyak;
-    char nama[50];
-    double price[50];
+struct person 
+{
+    char nama[30];
+    char judul[50];
+    vector<string> seat;
+    int banyak = 0;
+    double harga = 0;
+};
 
-    cout << "\t\tDaftar Menu :\n";
-    cout << "Menu :             Harga:\n";
-    cout << "1. Ayam Goreng     Rp. 10.000\n";
-    //int price_1 = 10000;
-    cout << "2. Nasi Goreng     Rp. 12.000\n";
-    //int price_2 = 12000; 
-    cout << "3. Es Teh          Rp. 2.000\n";
-    //int price_3 = 2000;
-    cout << "4. Es Jeruk        Rp. 3.000\n";
-    //int price_4 = 3000;
-    cout << "5. Es Campur       Rp. 8.000\n\n";
-    //int price_5 = 8000;
+queue<person> pdata;
 
-    cout << "Masukkan jumlah menu yang dipesan : "; cin >> jml;
-    for (i = 0; i < jml; i++) {
-        cout << "Menu ke - [" << i+1 << "] :\n";
-        cout << "Nama   : "; cin >> nama[i];
-        cout << "Harga  : "; cin >> price[i];
-        cout << "Jumlah : "; cin >> banyak;
+bool seat[10][10] = {};
 
-        total = banyak * price[i];
-        cout << "Total Harga Rp." << total << endl;
+// void init() {
+//     antre.head = 0;
+//     antre.tail = 0;
+// }
+
+void Show_Chart()
+{
+    cout << "\tSeats" << endl;
+    cout << "   1 2 3 4 5 6 7 8 9 10\n";
+    
+    for (int i = 0; i < 10; i++)
+    {
+        cout << endl << char(i + 'A');
+        for (int j = 0; j < 10; j++)
+        {
+            cout << " " <<  (seat[i][j] ? '*' : '#');
+        }
     }
+
+    cout << endl;
+}
+
+bool full() {
+    if (pdata.size() == MAX) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// bool empty(void) {
+//     if (pdata. == -1) {
+//         return true;
+//     } else {
+//         return false;
+//     }
     
+// }
+
+void tampilData(queue<person> q) {
+    while (!q.empty())
+    {
+        person qw_data = q.front();
+		cout << " " << qw_data.nama;
+        cout << " " << qw_data.judul;
+        
+        int vector_size = qw_data.seat.size();
+        
+        for (int i = 0; i < vector_size; i++)
+        {
+            cout << " " << qw_data.seat[i];    
+        }
+        
+        cout << " " << qw_data.harga * qw_data.banyak;
+		q.pop();
+	}
+	cout<<endl;
+}
+
+double checkHarga(int row, int column) {
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    double base_price = 40000.0;
+
+    if (column == 9)
+        base_price += 10000.00;
+
+    if (ltm->tm_wday == 0 || ltm->tm_wday == 6 )
+        base_price += 5000.00;
+
+    return base_price;
+}
+
+person insertData() {
+    person temp_pdata;
+
+    cout << "Masukkan data..\n";
+    cin.ignore();
+    cout << "Atas nama           : "; cin.getline(temp_pdata.nama, 30);
+    cout << "Masukkan judul film : "; cin.getline(temp_pdata.judul, 50);
+
+    string the_choosen_one;
+    char quit = 'y';
+    char answer;
+    double totalCost = 0;
+    cout << "Purchase a Ticket\n\n";
+    do 
+    {
+        Show_Chart();
+        cout << "Please select the row you would like to sit in: ";
+        cin >> the_choosen_one;
+        // cout << "Please select the seat you would like to sit in: ";
+        // cin >> column;
+
+        // int i = toupper(row) - 65;
+        int i = toupper(the_choosen_one[0]) - 'A';
+        int j = the_choosen_one[1] - '0';
+        
+        if (seat[i][j])
+        {
+            cout << "Sorry that seat is sold-out, Please select a new seat.";
+            cout << endl;
+        }
+        else 
+        {
+            // cost = .data[antre.tail].harga[row] + 0;
+            temp_pdata.harga = checkHarga(i, j);
+            totalCost += temp_pdata.harga;
+            cout << "That ticket costs: " << temp_pdata.harga << endl;
+            cout << "Confirm Purchase? Enter (Y/n)";
+            cin >> answer;
+            
+            if (tolower(answer) == 'y')
+            { 
+                cout << "Your ticket purchase has been confirmed." << endl;
+                seat[i][j] = true;
+                temp_pdata.seat.push_back(the_choosen_one);
+                temp_pdata.banyak++;
+            }
+
+            cout << "Would you like to look at another seat? (Y/n) ";
+            cin >> quit;
+        }
+    }
+    while (tolower(quit) == 'y');
+
+    return temp_pdata; 
+}
+
+void enQueue(person adata) 
+{
+    if (!full()) 
+    {
+        pdata.push(adata);
+    }
+}
+
+void menu() 
+{
+    int pilihan;
     
-}*/
+    do
+    {
+        system("tput reset");
+        cout << "+----------------------------------------+\n";
+        cout << "|                  MENU                  +\n";
+        cout << "+----------------------------------------+\n";
+        cout << "| 1. Lihat antran dan kursi              |\n";
+        cout << "| 2. Beli tiket                          |\n";
+        cout << "| 3. Memberangkatkan penonton            |\n";
+        cout << "| 4. Memberangkatkan semua penonton      |\n";
+        cout << "| 5. Lihat data penjualan                |\n";
+        cout << "| 6. Exit                                |\n";
+        cout << "+----------------------------------------+\n";
+        cout << "Masukkan pilihan anda : "; cin >> pilihan;
+        switch(pilihan) {
+            case 1:
+                tampilData(pdata);
+                break;
+            case 2:
+                enQueue(insertData());
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+        }
+    } while(pilihan != 6);
+    
+}
+
+
 
 int main() {
-    /*int pilihan;
-    cout << "1. Daftar menu \n  2.Input\n";*/
-    int jml, i, total, banyak, paket;
-    string nama[50];
-    double price[100];
-    double bayar = 0;
-    long harga;
+    int pilihan = -1;
+    cout << "+------------------------------------------+\n";
+    cout << "|         FINAL PROJECT STRUKTUR DATA      |\n";
+    cout << "+------------------------------------------+\n";
+    cout << "|           PROGRAM RESERVASI BIOSKOP      |\n";
+    cout << "+------------------------------------------+\n";
+    cout << "|                                          |\n";
+    cout << "+------------------------------------------+\n";
+    cout << "| Anggota kelompok :                       |\n";
+    cout << "+------------------------------------------+\n";
+    cout << "| Hanif Rahman (18.11.1883                 |\n";
+    cout << "+------------------------------------------+\n\n";
 
-    cout << "\t\tDaftar Menu :\n";
-    cout << "Menu :                                   Harga:\n";
-    cout << "1. Ayam goreang sayap + nasi + es teh    Rp. 9.900\n";
-    cout << "2. Ayam goreng dada + naso + es teh      Rp. 11.900\n";
-    cout << "3. nasi goreng + telur + es teh          Rp. 12.900\n";
-    cout << "4. Mie goreng + es teh                   Rp. 12.000\n";
-    cout << "5. Nasi goreng seafood + es teh          Rp. 14.000\n";
-    cout << "\n\n";
-
-    cout << "Menu yang dipilih [1-5] : "; cin >> paket;
-    cout << "jumlah : "; cin >> jml;
-
-    switch (paket) {
-      case 1 : harga = 9900;
-        break;
-      case 2 : harga = 11900;
-        break; 
-      case 3 : harga = 12900;
-        break;
-      case 4 : harga = 12000;
-        break;
-      case 5 : harga = 14000;
-        break;
-    }
-
-    bayar = harga * jml;
-    cout << "Total bayar Rp. " << bayar << "\n";
-
-
-    /* cout << "Masukkan jumlah menu yang dipesan : "; cin >> jml;
-    for (i = 0; i < jml; i++) {
-        cout << "Menu ke - [" << i+1 << "] :\n";
-        cout << "Nama   : "; cin >> nama[i];
-        cout << "Harga  : "; cin >> price[i];
-        cout << "Jumlah : "; cin >> banyak;
-        total = banyak * price[i];
-        bayar += total;
-        
-    }
-        cout << "Total Harga Rp." << bayar << endl;*/
+    cout << "+------------------------------+\n";
+    cout << "|          MAIN MENU           |\n";
+    cout << "+------------------------------+\n";
+    cout << "| 1. Program reservasi bioskop |\n";
+    cout << "| 2. EXIT                      |\n";
+    cout << "+------------------------------+\n\n";
+    cout << "Masukkan pilihan anda : "; cin >> pilihan;
+    switch(pilihan) {
+        case 1: menu();
+            break;
+    } while (pilihan != 2);
+    
+    return 0;
 }
