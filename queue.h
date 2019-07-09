@@ -12,11 +12,28 @@ struct seat_struct
     double harga;
 };
 
+// struct film
+// {
+//     int id;
+    
+// };
+
+struct film
+{
+    int id;
+    // int idFilm;
+    string judul;
+    // string jamTayang;
+    // string studio;
+    double price;
+    bool seat[10][10];
+};
+
 struct person
 {
-    string id;
     string nama;
-    string judul;
+    // string judul;
+    int idFilm;
     vector<seat_struct> seat;
     // double harga = 0;
 };
@@ -31,6 +48,22 @@ class queue
         int head = 0;
 
     public:
+    int getHead() {
+        return head;
+    }
+
+    void setHead(int value) {
+        head = value;
+    }
+
+    int getTail() {
+        return tail;
+    }
+
+    void setTail(int value) {
+        tail = value;
+    }
+
     bool full() 
     {
         if (tail == MAX)
