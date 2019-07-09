@@ -1,40 +1,23 @@
-#include <iostream> // cout dkk
-// #include <iomanip>
-#include "./queue.h" 
-#include <conio.h>
+#include <iostream> // cout, cin
+#include "./queue.h" // struct
+#include <conio.h> // getch
 #include <stdlib.h> // system()
-// #include <array>
 #include <algorithm> // transform
 #include <time.h> // checkHarga()
-#include <ctype.h> // tolower()
+#include <ctype.h> // tolower(), toupper()
 #include <vector> // vector
-// #include <string>
-
-// #define MAX 10
 
 using namespace std;
 
-queue qw;
-// queue<person> pdata;
+queue qw; // data queue
 
-// bool seat[10][10] = {};
-
-// struct film films[2] = {
-//     {1, },
-//     {2, }
-// };
-
+//data film
 struct film films[2] = {
     {1, "spider-man: far from home", 40000.00, {}},
     // {2, 1, "Studio #1", 40000.00, seat},
     {2, "annabelle", 50000.00, {}},
     // {5, 2, "Studio #1", 40000.00, seat}
 };
-
-// void init() {
-//     antre.head = 0;
-//     antre.tail = 0;
-// }
 
 int searchFilmByTitle(string title) 
 {
@@ -49,8 +32,6 @@ int searchFilmByTitle(string title)
             flag = 1;
             break;
         }
-
-        // foundId++;
     }
 
     if (flag == 0)
@@ -62,6 +43,7 @@ int searchFilmByTitle(string title)
         return foundId;
     }
 }
+
 int getIndexFilmsById(int id)
 {
     int flag = 0;
@@ -71,7 +53,6 @@ int getIndexFilmsById(int id)
     {
         if (item.id == id)
         {
-            // foundId = item.id;
             flag = 1;
             break;
         }
@@ -98,7 +79,6 @@ film searchFilmById(int id)
     {
         if (item.id == id)
         {
-            // foundId = item.id;
             flag = 1;
             break;
         }
@@ -116,38 +96,10 @@ film searchFilmById(int id)
     }
 }
 
-// vector<show> searchShowsByIdFilm(int idFilm)
-// {
-//     int flag = 0;
-//     vector<show> foundShows;
-    
-//     for (auto item: shows)
-//     {
-//         if (item.idFilm == idFilm)
-//         {
-//             // foundId = item.id;
-//             foundShows.push_back(item);
-//             flag = 1;
-//         }
-//     }
-
-//     if (flag == 0)
-//     {
-//         return;
-//     }
-//     else
-//     {
-//         return foundShows;
-//     }
-// }
-
 void Show_Chart(film film)
 {
     cout << "\tSeats" << endl;
     cout << "  1 2 3 4 5 6 7 8 9 10";
-    
-    // int idFilm = searchFilmByTitle(film_title);
-    // vector<show> idShow = searchShowsByIdFilm(idFilm);
 
     for (int i = 0; i < 10; i++)
     {
@@ -179,7 +131,6 @@ void tampilData() {
             cout << "[" << i++ << "] Nama\t: " << data.nama << endl;
             cout << "    Judul\t: " << searchFilmById(data.idFilm).judul << endl;
             
-            // int vector_size = data.seat.size();
             double totalPrice = 0;
             
             cout << "    Seat\t:";
@@ -244,29 +195,18 @@ isijudul:
         goto isijudul;
         // system("tput reset");
     }
+
     int IndexFilm = getIndexFilmsById(idFilm);
     cout << "Beli Tiket\n\n";    
-    // film choosenFilm = searchFilmById(idFilm);
+    
     do 
     {        
-        // cout << "Jam Tayang : " << endl;
-        // for(auto item: choosenShows)
-        // {
-        //     cout << " " << item.jamTayang << " " << item.studio << "\n";
-        // }
-        // string jamTayang;
-        // cout << "Pilih jam tayang : "; getline(cin, jamTayang);
-        
         temp_pdata.idFilm = idFilm;
-        // int randomStudio =;
+    
         Show_Chart(films[IndexFilm]);
         cout << "Pilih kursi Anda: ";
         cin >> the_choosen_one;
-        // cout << "Please select the seat you would like to sit in: ";
-        // cin >> column;
-
-        // int i = toupper(row) - 65;
-
+    
         int i = toupper(the_choosen_one[0]) - 'A';
         int j = stoi(the_choosen_one.substr(1)) - 1;
         
@@ -280,8 +220,7 @@ isijudul:
             seat_struct person_seat;
             double totalCost = 0;
             char answer;
-            // cost = .data[antre.tail].harga[row] + 0;
-            // temp_pdata = checkHarga(i, j);
+    
             cout << "Harga tiket: " << checkHarga(films[IndexFilm], i, j) << endl;
             cout << "Confirm tiket (Y/n) ";
             cin >> answer;
@@ -362,7 +301,6 @@ void Clear()
   {
     while(!qw.empty())
     {
-    //   qw.pop();
         deQueue();
     }
 
@@ -428,6 +366,7 @@ void SortFilmsByPrice(bool asc = true)
 void DisplayFilms()
 {
     redo:
+    // clean the input buffer
     cin.ignore(numeric_limits<streamsize>::max(),'\n'); 
     system("tput reset");
 
@@ -439,9 +378,6 @@ void DisplayFilms()
     int key;
     cout << "\nCommands \n Back(Esc)\n Sorting berdasarkan nama(A)\n Sorting Berdasarkan Id(B)\n Sorting Berdasarkan Harga(C)\n Lihat Kursi(D) ";
     key = toupper(getch());
-
-    //clear the input buffer
-    // while ((getchar()) != '\n'); 
 
     switch (key)
     {
@@ -517,7 +453,6 @@ void menu()
                 Clear();
                 break;
             case 5:
-                // cin.ignore(numeric_limits<streamsize>::max(),'\n'); 
                 DisplayFilms();
                 break;
             default:
